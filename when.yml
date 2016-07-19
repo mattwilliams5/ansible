@@ -1,0 +1,18 @@
+--- # WHEN Playbook Example
+- hosts: apacheweb
+  user: test
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  vars:
+    playbook_type: conditionalexample
+  vars_files:
+    - conf/copyright.yml
+    - conf/webdefaults.yml
+  tasks:
+    - name: Install Apache Appropriate to the Distribution Type (Debian)
+      command: apt-get install -y apache2
+      when: ansible_os_family == "Debian"
+    - name: Install Apache Appropriate to the Distribution Type (RedHat/Centos)
+      command: yum install -y httpd
+      when: ansible_os_family == "RedHat"

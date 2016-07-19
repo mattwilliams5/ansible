@@ -1,0 +1,16 @@
+--- # UNTIL EXAMPLE
+- hosts: appserver
+  user: test
+  become: yes
+  gather_facts: no
+  connection: ssh
+  tasks:
+    - name: Installing Apache Web Server
+      yum: pkg=httpd state=latest
+    - name: Verify Service Status
+      shell: systemctl status httpd
+      register: result
+      until: result.stdout.find("active (running)") != -1
+      retries: 15
+      delay: 5
+    - debug: var=result

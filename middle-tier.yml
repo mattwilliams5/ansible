@@ -1,0 +1,9 @@
+--- # ANSIBLE FILE FOR USE WITH PACKER ON WEB SERVERS
+- hosts: apacheweb
+  user: test
+  become: yes
+  tasks:
+    - name: Installing nginx
+      yum: name=nginx state=installed update_cache=yes
+    - name: Starting nginx on box
+      service: name=nginx state=started enabled=true
