@@ -1,0 +1,18 @@
+--- # EC2 SNAPSHOT THEN UPDATE ALL PACKAGES
+- hosts:
+  become: yes
+  gather_facts: no
+  remote_user: ell_ansible
+  connection: ssh
+  vars_files:
+  - # Need a awscreds.yml
+  tasks:
+  - name: ec2 snapshot
+    ec2_snapshot:
+          aws_access_key: "{{ aws_id }}"
+          aws_secret_key: "{{ aws_key }}"
+          region: "{{ aws_regin }}"
+          snapshot_id: 
+          state: absent
+      wait: no
+        register: snapshot
