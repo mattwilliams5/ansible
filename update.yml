@@ -1,0 +1,28 @@
+--- # EC2 SNAPSHOT THEN UPDATE ALL PACKAGES
+- hosts:
+  become: yes
+  gather_facts: no
+  remote_user: ell_ansible
+  connection: ssh
+  vars_files:
+  - # Need a awscreds.yml have to research this or the variables set up
+  tasks:
+  - name: ec2 snapshot
+    ec2_snapshot:
+          aws_access_key: "{{ aws_id }}"
+          aws_secret_key: "{{ aws_key }}"
+          region: "{{ aws_regin }}"
+      instance_id: look it up
+          instance_tags: name
+          device_name: /dev/xvda
+          description: Snapshot Pre-UPDATE
+          wait: no
+        register: snapshot
+        
+  - name: Do a yum update
+    action: yum name=* state=latest
+  - local_action:
+      module: ec2
+          instance_tags:
+              Name: name
+          state: restarted
